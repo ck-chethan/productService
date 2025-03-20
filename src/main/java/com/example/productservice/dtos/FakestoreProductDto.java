@@ -1,13 +1,13 @@
-package com.example.productservice.models;
+package com.example.productservice.dtos;
 
 import lombok.*;
 
 @Data
-public class Product {
+public class FakestoreProductDto {
     private Long id;
     private String title;
     private double price;
-    private Category category;
     private String description;
-    private String imageUrl;
+    private String category;
+    private String image;
 }
