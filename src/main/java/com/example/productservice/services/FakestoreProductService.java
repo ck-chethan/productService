@@ -1,6 +1,7 @@
 package com.example.productservice.services;
 
 import com.example.productservice.dtos.FakestoreProductDto;
+import com.example.productservice.exceptions.ProductNotExistsException;
 import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class FakestoreProductService implements ProductService{
     @Override
     public Product getProductById(Long id) {
         FakestoreProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakestoreProductDto.class);
+        if (productDto == null) {
+            throw new ProductNotExistsException("Product with id " + id + " does not exist");
+        }
         return convertFakeStoreProductToProduct(productDto);
     }
 
