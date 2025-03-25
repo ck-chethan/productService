@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-@Service
+@Service("fakestoreProductService")
 public class FakestoreProductService implements ProductService{
     private RestTemplate restTemplate;
 
@@ -66,7 +66,9 @@ public class FakestoreProductService implements ProductService{
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public boolean deleteProduct(Long id) {
         restTemplate.delete("https://fakestoreapi.com/products/" + id);
+        return true;
     }
+
 }
