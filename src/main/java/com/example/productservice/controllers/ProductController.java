@@ -22,7 +22,7 @@ public class ProductController {
     }
     @GetMapping()
     public ResponseEntity<List<Product>> getAllProducts() {
-        ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.getAllProducts(), null, HttpStatus.OK);
+//        ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.getAllProducts(), null, HttpStatus.OK);
         return ResponseEntity.ok(productService.getAllProducts());
     }
 

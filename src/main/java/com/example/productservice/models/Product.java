@@ -1,7 +1,6 @@
 package com.example.productservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Data
@@ -10,7 +9,7 @@ import lombok.*;
 public class Product extends BaseModel {
     private String title;
     private Double price;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Category category;
     private String description;
     private String imageUrl;
