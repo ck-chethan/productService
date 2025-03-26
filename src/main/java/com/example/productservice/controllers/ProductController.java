@@ -38,12 +38,12 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-        return ResponseEntity.ok(productService.updateProduct(product));
+        return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-        return ResponseEntity.ok(productService.replaceProduct(product));
+        return ResponseEntity.ok(productService.replaceProduct(id, product));
     }
 
     @DeleteMapping("/{id}")

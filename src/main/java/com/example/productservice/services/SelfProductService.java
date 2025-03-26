@@ -27,7 +27,11 @@ public class SelfProductService  implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        Optional<List<Product>> productsOptional = Optional.of(productRepository.findAll());
+        if (productsOptional.isEmpty()) {
+            throw new ProductNotExistsException("No products found");
+        }
+        return productsOptional.get();
     }
 
     @Override
@@ -53,17 +57,44 @@ public class SelfProductService  implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        return null;
+    public Product updateProduct(Long id, Product product) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isEmpty()) {
+            throw new ProductNotExistsException("Product with id " + id + " does not exist");
+        }
+        Product updatedProduct = productOptional.get();
+        if (product.getTitle() != null) {
+            updatedProduct.setTitle(product.getTitle());
+        }
+        if (product.getDescription() != null) {
+            updatedProduct.setDescription(product.getDescription());
+        }
+        if (product.getPrice() != null) {
+            updatedProduct.setPrice(product.getPrice());
+        }
+        if (product.getCategory() != null) {
+            updatedProduct.setCategory(product.getCategory());
+        }
+        if (product.getImageUrl() != null) {
+            updatedProduct.setImageUrl(product.getImageUrl());
+        }
+        return productRepository.save(updatedProduct);
+
     }
 
     @Override
-    public Product replaceProduct(Product product) {
-        return null;
+    public Product replaceProduct(Long id, Product product) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isEmpty()) {
+            throw new ProductNotExistsException("Product with id " + id + " does not exist");
+        }
+        product.setId(id);
+        return productRepository.save(product);
     }
 
     @Override
     public boolean deleteProduct(Long id) {
-        return false;
+        productRepository.deleteById(id);
+        return true;
     }
 }
