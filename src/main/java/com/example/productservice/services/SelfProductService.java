@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Primary
 @Service("selfProductService")
 //@Primary -> This will also works but easy to make mistake if someone make other class as Primary
 public class SelfProductService  implements ProductService {
