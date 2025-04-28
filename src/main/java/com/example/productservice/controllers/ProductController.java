@@ -21,22 +21,24 @@ public class ProductController {
     private ProductService productService;
     private RestTemplate restTemplate;
     private AuthenticationCommons authenticationCommons;
+
     @Autowired
     public ProductController(@Qualifier("selfProductService") ProductService productService, RestTemplate restTemplate, AuthenticationCommons authenticationCommons) {
         this.productService = productService;
         this.restTemplate = restTemplate;
         this.authenticationCommons = authenticationCommons;
     }
+
     @GetMapping()
-    public ResponseEntity<List<Product>> getAllProducts(@RequestHeader("AuthenticationToken") String token) {
+    public ResponseEntity<List<Product>> getAllProducts() {
 //        ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.getAllProducts(), null, HttpStatus.OK);
-        UserDto userDto = authenticationCommons.validateToken(token);
-        if (userDto == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        if (userDto.getRoles() == null || !userDto.getRoles().contains("admin")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+//        UserDto userDto = authenticationCommons.validateToken(token);
+//        if (userDto == null) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
+//        if (userDto.getRoles() == null || !userDto.getRoles().contains("ADMIN")) {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
