@@ -5,15 +5,25 @@ import com.example.productservice.exceptions.ProductNotExistsException;
 import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+@Primary
 @Service("fakestoreProductService")
 public class FakestoreProductService implements ProductService{
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    public FakestoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
+        this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
+    }
 
     private Product convertFakeStoreProductToProduct(FakestoreProductDto productDto) {
         Product product = new Product();
@@ -27,11 +37,6 @@ public class FakestoreProductService implements ProductService{
         return product;
     }
 
-    @Autowired
-    public FakestoreProductService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
     @Override
     public List<Product> getAllProducts() {
         List<FakestoreProductDto> productDtoList = List.of(restTemplate.getForObject("https://fakestoreapi.com/products", FakestoreProductDto[].class));
@@ -40,11 +45,21 @@ public class FakestoreProductService implements ProductService{
 
     @Override
     public Product getProductById(Long id) {
+        // Check if the product is in Redis cache
+        Product cachedProduct = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + id);
+        if (cachedProduct != null) {
+            return cachedProduct;
+        }
+        // If not in cache, fetch from the external API
+        // and store it in Redis cache
         FakestoreProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakestoreProductDto.class);
         if (productDto == null) {
             throw new ProductNotExistsException("Product with id " + id + " does not exist");
         }
-        return convertFakeStoreProductToProduct(productDto);
+        // Store the product in Redis cache
+        Product product = convertFakeStoreProductToProduct(productDto);
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id, product);
+        return product;
     }
 
     @Override

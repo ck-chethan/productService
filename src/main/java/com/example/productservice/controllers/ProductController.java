@@ -23,7 +23,7 @@ public class ProductController {
     private AuthenticationCommons authenticationCommons;
 
     @Autowired
-    public ProductController(@Qualifier("selfProductService") ProductService productService, RestTemplate restTemplate, AuthenticationCommons authenticationCommons) {
+    public ProductController(@Qualifier("fakestoreProductService") ProductService productService, RestTemplate restTemplate, AuthenticationCommons authenticationCommons) {
         this.productService = productService;
         this.restTemplate = restTemplate;
         this.authenticationCommons = authenticationCommons;
