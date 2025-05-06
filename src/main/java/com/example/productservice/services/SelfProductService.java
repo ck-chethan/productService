@@ -37,7 +37,10 @@ public class SelfProductService  implements ProductService {
 
     @Override
     public Page<ProductResponse> getAllProducts(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        Optional<Page<Product>> productsOptional = Optional.of(productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending())));
+        Sort sort = Sort.by(sortBy);
+        sort = sortDir.equalsIgnoreCase("desc") ? sort.descending() : sort.ascending();
+        sort = sort.and(Sort.by("price").ascending());
+        Optional<Page<Product>> productsOptional = Optional.of(productRepository.findAll(PageRequest.of(pageNumber, pageSize, sort)));
         if (productsOptional.isEmpty()) {
             throw new ProductNotExistsException("No products found");
         }
