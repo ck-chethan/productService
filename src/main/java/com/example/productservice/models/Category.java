@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Category extends BaseModel{
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = {CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Product> products;
     private String name;

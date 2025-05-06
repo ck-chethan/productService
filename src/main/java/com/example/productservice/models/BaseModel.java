@@ -1,18 +1,15 @@
 package com.example.productservice.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@MappedSuperclass
 @Getter
 @Setter
-@MappedSuperclass
 public class BaseModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +17,6 @@ public class BaseModel implements Serializable {
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
-    private boolean isDeleted;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }

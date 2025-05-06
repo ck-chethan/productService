@@ -2,6 +2,8 @@ package com.example.productservice.repositories;
 
 import com.example.productservice.models.Product;
 import com.example.productservice.repositories.projections.ProductWithIdAndtitle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +16,11 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByTitleContaining(String name);
+
+    Page<Product> findAll(Pageable pageable);
+
+    Page<Product> findByCategory_Id(Long Id, Pageable pageable);
+
 
     Long deleteByTitle(String title);
 
